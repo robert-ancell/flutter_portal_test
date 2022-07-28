@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:xdg_desktop_portal/xdg_desktop_portal.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final portal = XdgDesktopPortalClient();
 
   @override
   Widget build(BuildContext context) {
@@ -15,39 +17,33 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final _portal = XdgDesktopPortalClient();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Portal Test'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            EmailPage(portal: _portal),
-            LocationPage(portal: _portal),
-            NetworkMonitorPage(portal: _portal),
-            NotificationPage(portal: _portal),
-            OpenUriPage(portal: _portal),
-            ProxyResolverPage(portal: _portal),
-            SettingsPage(portal: _portal),
-          ],
+      home: DefaultTabController(
+        length: 7,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'Email'),
+                Tab(text: 'Location'),
+                Tab(text: 'NetworkMonitor'),
+                Tab(text: 'Notification'),
+                Tab(text: 'OpenURI'),
+                Tab(text: 'ProxyResolver'),
+                Tab(text: 'Settings'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              EmailPage(portal: portal),
+              LocationPage(portal: portal),
+              NetworkMonitorPage(portal: portal),
+              NotificationPage(portal: portal),
+              OpenUriPage(portal: portal),
+              ProxyResolverPage(portal: portal),
+              SettingsPage(portal: portal),
+            ],
+          ),
         ),
       ),
     );
