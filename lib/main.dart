@@ -15,15 +15,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Portal Test'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -36,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Portal Test'),
       ),
       body: Center(
         child: Column(
@@ -63,13 +61,11 @@ class EmailPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<EmailPage> createState() => EmailPageState(portal);
+  State<EmailPage> createState() => EmailPageState();
 }
 
 class EmailPageState extends State<EmailPage> {
-  final XdgDesktopPortalClient portal;
-
-  EmailPageState(this.portal);
+  EmailPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +76,7 @@ class EmailPageState extends State<EmailPage> {
           children: <Widget>[
             OutlinedButton(
               onPressed: () async {
-                await portal.email.composeEmail();
+                await widget.portal.email.composeEmail();
               },
               child: const Text('Compose Email'),
             ),
@@ -97,13 +93,11 @@ class LocationPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<LocationPage> createState() => LocationPageState(portal);
+  State<LocationPage> createState() => LocationPageState();
 }
 
 class LocationPageState extends State<LocationPage> {
-  final XdgDesktopPortalClient portal;
-
-  LocationPageState(this.portal);
+  LocationPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -127,13 +121,11 @@ class NetworkMonitorPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<NetworkMonitorPage> createState() => NetworkMonitorPageState(portal);
+  State<NetworkMonitorPage> createState() => NetworkMonitorPageState();
 }
 
 class NetworkMonitorPageState extends State<NetworkMonitorPage> {
-  final XdgDesktopPortalClient portal;
-
-  NetworkMonitorPageState(this.portal);
+  NetworkMonitorPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -157,17 +149,15 @@ class NotificationPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<NotificationPage> createState() => NotificationPageState(portal);
+  State<NotificationPage> createState() => NotificationPageState();
 }
 
 class NotificationPageState extends State<NotificationPage> {
-  final XdgDesktopPortalClient portal;
-
   final _titleController = TextEditingController(text: 'Warning');
   final _bodyController =
       TextEditingController(text: 'Flutter may be addictive');
 
-  NotificationPageState(this.portal);
+  NotificationPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +179,10 @@ class NotificationPageState extends State<NotificationPage> {
         ),
         OutlinedButton(
           onPressed: () async {
-            await portal.notification.addNotification('notification_id_1',
-                title: _titleController.text, body: _bodyController.text);
+            await widget.portal.notification.addNotification(
+                'notification_id_1',
+                title: _titleController.text,
+                body: _bodyController.text);
           },
           child: const Text('Add Notification'),
         ),
@@ -206,15 +198,13 @@ class OpenUriPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<OpenUriPage> createState() => OpenUriPageState(portal);
+  State<OpenUriPage> createState() => OpenUriPageState();
 }
 
 class OpenUriPageState extends State<OpenUriPage> {
-  final XdgDesktopPortalClient portal;
-
   final _uriController = TextEditingController(text: 'https://example.com');
 
-  OpenUriPageState(this.portal);
+  OpenUriPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +219,7 @@ class OpenUriPageState extends State<OpenUriPage> {
         ),
         OutlinedButton(
           onPressed: () async {
-            await portal.openUri.openUri(_uriController.text);
+            await widget.portal.openUri.openUri(_uriController.text);
           },
           child: const Text('Open URI'),
         ),
@@ -246,17 +236,15 @@ class ProxyResolverPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ProxyResolverPage> createState() => ProxyResolverPageState(portal);
+  State<ProxyResolverPage> createState() => ProxyResolverPageState();
 }
 
 class ProxyResolverPageState extends State<ProxyResolverPage> {
-  final XdgDesktopPortalClient portal;
-
   final _uriController = TextEditingController(text: 'https://example.com');
 
   String _lookupResult = '';
 
-  ProxyResolverPageState(this.portal);
+  ProxyResolverPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +259,8 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
         ),
         OutlinedButton(
           onPressed: () async {
-            var uris = await portal.proxyResolver.lookup(_uriController.text);
+            var uris =
+                await widget.portal.proxyResolver.lookup(_uriController.text);
             setState(() => _lookupResult = uris.join(', '));
           },
           child: const Text('Lookup URI'),
@@ -289,19 +278,17 @@ class SettingsPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SettingsPage> createState() => SettingsPageState(portal);
+  State<SettingsPage> createState() => SettingsPageState();
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  final XdgDesktopPortalClient portal;
-
   final _namespaceController =
       TextEditingController(text: 'org.gnome.desktop.interface');
   final _keyController = TextEditingController(text: 'font-name');
 
   String _settingsValue = '';
 
-  SettingsPageState(this.portal);
+  SettingsPageState();
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +310,7 @@ class SettingsPageState extends State<SettingsPage> {
         ),
         OutlinedButton(
           onPressed: () async {
-            var value = await portal.settings
+            var value = await widget.portal.settings
                 .read(_namespaceController.text, _keyController.text);
             setState(() => _settingsValue = '${value.toNative()}');
           },
