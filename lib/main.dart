@@ -31,12 +31,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _portal = XdgDesktopPortalClient();
+  final _lookupUriController =
+      TextEditingController(text: 'https://example.com');
+  final _notificationTitleController = TextEditingController(text: 'Warning');
+  final _notificationBodyController =
+      TextEditingController(text: 'Flutter may be addictive');
   final _uriController = TextEditingController(text: 'https://example.com');
   final _settingsNamespaceController =
       TextEditingController(text: 'org.gnome.desktop.interface');
   final _settingsKeyController = TextEditingController(text: 'font-name');
 
   String _settingsValue = '';
+  String _lookupResult = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +56,55 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Column(
               children: <Widget>[
+                OutlinedButton(
+                  onPressed: () async {
+                    await _portal.email.composeEmail();
+                  },
+                  child: const Text('Compose Email'),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                OutlinedButton(
+                  onPressed: () async {
+                    print('FIXME');
+                  },
+                  child: const Text('Location'),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                OutlinedButton(
+                  onPressed: () async {
+                    print('FIXME');
+                  },
+                  child: const Text('Network Monitor'),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                TextField(
+                  controller: _notificationTitleController,
+                ),
+                TextField(
+                  controller: _notificationBodyController,
+                ),
+                OutlinedButton(
+                  onPressed: () async {
+                    await _portal.notification.addNotification(
+                        'notification_id_1',
+                        title: _notificationTitleController.text,
+                        body: _notificationBodyController.text);
+                  },
+                  child: const Text('Add Notification'),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
                 TextField(
                   controller: _uriController,
                 ),
@@ -59,6 +114,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: const Text('Open URI'),
                 ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                TextField(
+                  controller: _lookupUriController,
+                ),
+                OutlinedButton(
+                  onPressed: () async {
+                    var uris = await _portal.proxyResolver
+                        .lookup(_lookupUriController.text);
+                    setState(() => _lookupResult = uris.join(', '));
+                  },
+                  child: const Text('Lookup URI'),
+                ),
+                Text(_lookupResult),
               ],
             ),
             Column(children: <Widget>[
