@@ -93,7 +93,6 @@ class LocationPage extends StatefulWidget {
 }
 
 class LocationPageState extends State<LocationPage> {
-  XdgLocationSession? session;
   StreamSubscription<XdgLocation>? locationUpdatedSubscription;
 
   LocationPageState();
@@ -107,24 +106,22 @@ class LocationPageState extends State<LocationPage> {
           Row(
             children: <Widget>[
               Switch(
-                value: session != null,
+                value: locationUpdatedSubscription != null,
                 onChanged: (enabled) async {
                   if (enabled) {
-                    var session = await widget.portal.location.createSession();
+                    var locations =
+                        await widget.portal.location.createSession();
                     var locationUpdatedSubscription =
-                        session.locationUpdated.listen((location) {
+                        locations.listen((location) {
                       print(location);
                     });
-                    await session.start();
                     setState(() {
-                      this.session = session;
                       this.locationUpdatedSubscription =
                           locationUpdatedSubscription;
                     });
                   } else {
-                    await session?.close();
                     await locationUpdatedSubscription?.cancel();
-                    setState(() => this.session = null);
+                    setState(() => this.locationUpdatedSubscription = null);
                   }
                 },
               ),
