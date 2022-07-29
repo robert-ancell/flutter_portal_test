@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:xdg_desktop_portal/xdg_desktop_portal.dart';
 
@@ -91,6 +93,9 @@ class LocationPage extends StatefulWidget {
 }
 
 class LocationPageState extends State<LocationPage> {
+  XdgLocationSession? session;
+  StreamSubscription<XdgLocation>? locationUpdatedSubscription;
+
   LocationPageState();
 
   @override
@@ -99,11 +104,32 @@ class LocationPageState extends State<LocationPage> {
       margin: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          OutlinedButton(
-            onPressed: () async {
-              print('FIXME');
-            },
-            child: const Text('Location'),
+          Row(
+            children: <Widget>[
+              Switch(
+                value: session != null,
+                onChanged: (enabled) async {
+                  if (enabled) {
+                    var session = await widget.portal.location.createSession();
+                    var locationUpdatedSubscription =
+                        session.locationUpdated.listen((location) {
+                      print(location);
+                    });
+                    await session.start();
+                    setState(() {
+                      this.session = session;
+                      this.locationUpdatedSubscription =
+                          locationUpdatedSubscription;
+                    });
+                  } else {
+                    await session?.close();
+                    await locationUpdatedSubscription?.cancel();
+                    setState(() => this.session = null);
+                  }
+                },
+              ),
+              Text('Enabled'),
+            ],
           ),
         ],
       ),
