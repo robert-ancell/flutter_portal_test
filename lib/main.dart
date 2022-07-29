@@ -273,8 +273,7 @@ class ProxyResolverPage extends StatefulWidget {
 
 class ProxyResolverPageState extends State<ProxyResolverPage> {
   final _uriController = TextEditingController(text: 'https://example.com');
-
-  String _lookupResult = '';
+  final _resultController = TextEditingController();
 
   ProxyResolverPageState();
 
@@ -293,13 +292,21 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
           ),
           OutlinedButton(
             onPressed: () async {
-              var uris =
+              _resultController.text = '';
+              var proxies =
                   await widget.portal.proxyResolver.lookup(_uriController.text);
-              setState(() => _lookupResult = uris.join(', '));
+              _resultController.text = proxies.join(', ');
             },
             child: const Text('Lookup URI'),
           ),
-          Text(_lookupResult),
+          TextField(
+            readOnly: true,
+            controller: _resultController,
+            decoration: InputDecoration(
+              helperText: 'Proxies',
+              border: OutlineInputBorder(),
+            ),
+          ),
         ],
       ),
     );
@@ -320,8 +327,7 @@ class SettingsPageState extends State<SettingsPage> {
   final _namespaceController =
       TextEditingController(text: 'org.gnome.desktop.interface');
   final _keyController = TextEditingController(text: 'font-name');
-
-  String _settingsValue = '';
+  final _valueController = TextEditingController();
 
   SettingsPageState();
 
@@ -347,13 +353,21 @@ class SettingsPageState extends State<SettingsPage> {
           ),
           OutlinedButton(
             onPressed: () async {
+              _valueController.text = '';
               var value = await widget.portal.settings
                   .read(_namespaceController.text, _keyController.text);
-              setState(() => _settingsValue = '${value.toNative()}');
+              _valueController.text = '${value.toNative()}';
             },
             child: const Text('Read Setting'),
           ),
-          Text(_settingsValue),
+          TextField(
+            readOnly: true,
+            controller: _valueController,
+            decoration: InputDecoration(
+              helperText: 'Value',
+              border: OutlineInputBorder(),
+            ),
+          ),
         ],
       ),
     );
