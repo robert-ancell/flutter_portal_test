@@ -55,8 +55,7 @@ class MyApp extends StatelessWidget {
 class EmailPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
 
-  const EmailPage({Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const EmailPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<EmailPage> createState() => EmailPageState();
@@ -68,7 +67,7 @@ class EmailPageState extends State<EmailPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           OutlinedButton(
@@ -85,8 +84,7 @@ class EmailPageState extends State<EmailPage> {
 
 class LocationPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
-  const LocationPage({Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const LocationPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<LocationPage> createState() => LocationPageState();
@@ -100,7 +98,7 @@ class LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           Row(children: <Widget>[
@@ -117,7 +115,7 @@ class LocationPageState extends State<LocationPage> {
                 }
               },
             ),
-            Text('Enabled'),
+            const Text('Enabled'),
           ]),
           StreamBuilder<XdgLocation>(
             stream: locations,
@@ -135,7 +133,7 @@ class LocationPageState extends State<LocationPage> {
                   TextField(
                     readOnly: true,
                     controller: latitudeController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       helperText: 'Latitude',
                       border: OutlineInputBorder(),
                     ),
@@ -143,7 +141,7 @@ class LocationPageState extends State<LocationPage> {
                   TextField(
                     readOnly: true,
                     controller: longitudeController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       helperText: 'Longitude',
                       border: OutlineInputBorder(),
                     ),
@@ -160,9 +158,7 @@ class LocationPageState extends State<LocationPage> {
 
 class NetworkMonitorPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
-  const NetworkMonitorPage(
-      {Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const NetworkMonitorPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<NetworkMonitorPage> createState() => NetworkMonitorPageState();
@@ -174,7 +170,7 @@ class NetworkMonitorPageState extends State<NetworkMonitorPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           OutlinedButton(
@@ -191,9 +187,7 @@ class NetworkMonitorPageState extends State<NetworkMonitorPage> {
 
 class NotificationPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
-  const NotificationPage(
-      {Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const NotificationPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<NotificationPage> createState() => NotificationPageState();
@@ -209,19 +203,19 @@ class NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           TextField(
             controller: _titleController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Title',
               border: OutlineInputBorder(),
             ),
           ),
           TextField(
             controller: _bodyController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Body',
               border: OutlineInputBorder(),
             ),
@@ -244,8 +238,7 @@ class NotificationPageState extends State<NotificationPage> {
 class OpenUriPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
 
-  const OpenUriPage({Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const OpenUriPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<OpenUriPage> createState() => OpenUriPageState();
@@ -259,12 +252,12 @@ class OpenUriPageState extends State<OpenUriPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           TextField(
             controller: _uriController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'URI',
               border: OutlineInputBorder(),
             ),
@@ -284,9 +277,7 @@ class OpenUriPageState extends State<OpenUriPage> {
 class ProxyResolverPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
 
-  const ProxyResolverPage(
-      {Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const ProxyResolverPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<ProxyResolverPage> createState() => ProxyResolverPageState();
@@ -301,12 +292,12 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           TextField(
             controller: _uriController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'URI',
               border: OutlineInputBorder(),
             ),
@@ -323,7 +314,7 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
           TextField(
             readOnly: true,
             controller: _resultController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Proxies',
               border: OutlineInputBorder(),
             ),
@@ -337,8 +328,7 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
 class SettingsPage extends StatefulWidget {
   final XdgDesktopPortalClient portal;
 
-  const SettingsPage({Key? key, required XdgDesktopPortalClient this.portal})
-      : super(key: key);
+  const SettingsPage({Key? key, required this.portal}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => SettingsPageState();
@@ -355,19 +345,19 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           TextField(
             controller: _namespaceController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Namespace',
               border: OutlineInputBorder(),
             ),
           ),
           TextField(
             controller: _keyController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Key',
               border: OutlineInputBorder(),
             ),
@@ -384,7 +374,7 @@ class SettingsPageState extends State<SettingsPage> {
           TextField(
             readOnly: true,
             controller: _valueController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               helperText: 'Value',
               border: OutlineInputBorder(),
             ),
