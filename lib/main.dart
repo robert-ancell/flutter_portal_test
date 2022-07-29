@@ -65,20 +65,18 @@ class EmailPageState extends State<EmailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            OutlinedButton(
-              onPressed: () async {
-                await widget.portal.email.composeEmail();
-              },
-              child: const Text('Compose Email'),
-            ),
-          ],
-        )
-      ],
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              await widget.portal.email.composeEmail();
+            },
+            child: const Text('Compose Email'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -97,15 +95,18 @@ class LocationPageState extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        OutlinedButton(
-          onPressed: () async {
-            print('FIXME');
-          },
-          child: const Text('Location'),
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              print('FIXME');
+            },
+            child: const Text('Location'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -125,15 +126,18 @@ class NetworkMonitorPageState extends State<NetworkMonitorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        OutlinedButton(
-          onPressed: () async {
-            print('FIXME');
-          },
-          child: const Text('Network Monitor'),
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              print('FIXME');
+            },
+            child: const Text('Network Monitor'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -157,32 +161,35 @@ class NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TextField(
-          controller: _titleController,
-          decoration: InputDecoration(
-            helperText: 'Title',
-            border: OutlineInputBorder(),
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            controller: _titleController,
+            decoration: InputDecoration(
+              helperText: 'Title',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _bodyController,
-          decoration: InputDecoration(
-            helperText: 'Body',
-            border: OutlineInputBorder(),
+          TextField(
+            controller: _bodyController,
+            decoration: InputDecoration(
+              helperText: 'Body',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        OutlinedButton(
-          onPressed: () async {
-            await widget.portal.notification.addNotification(
-                'notification_id_1',
-                title: _titleController.text,
-                body: _bodyController.text);
-          },
-          child: const Text('Add Notification'),
-        ),
-      ],
+          OutlinedButton(
+            onPressed: () async {
+              await widget.portal.notification.addNotification(
+                  'notification_id_1',
+                  title: _titleController.text,
+                  body: _bodyController.text);
+            },
+            child: const Text('Add Notification'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -204,22 +211,25 @@ class OpenUriPageState extends State<OpenUriPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TextField(
-          controller: _uriController,
-          decoration: InputDecoration(
-            helperText: 'URI',
-            border: OutlineInputBorder(),
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            controller: _uriController,
+            decoration: InputDecoration(
+              helperText: 'URI',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        OutlinedButton(
-          onPressed: () async {
-            await widget.portal.openUri.openUri(_uriController.text);
-          },
-          child: const Text('Open URI'),
-        ),
-      ],
+          OutlinedButton(
+            onPressed: () async {
+              await widget.portal.openUri.openUri(_uriController.text);
+            },
+            child: const Text('Open URI'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -244,25 +254,28 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TextField(
-          controller: _uriController,
-          decoration: InputDecoration(
-            helperText: 'URI',
-            border: OutlineInputBorder(),
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            controller: _uriController,
+            decoration: InputDecoration(
+              helperText: 'URI',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        OutlinedButton(
-          onPressed: () async {
-            var uris =
-                await widget.portal.proxyResolver.lookup(_uriController.text);
-            setState(() => _lookupResult = uris.join(', '));
-          },
-          child: const Text('Lookup URI'),
-        ),
-        Text(_lookupResult),
-      ],
+          OutlinedButton(
+            onPressed: () async {
+              var uris =
+                  await widget.portal.proxyResolver.lookup(_uriController.text);
+              setState(() => _lookupResult = uris.join(', '));
+            },
+            child: const Text('Lookup URI'),
+          ),
+          Text(_lookupResult),
+        ],
+      ),
     );
   }
 }
@@ -288,32 +301,35 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TextField(
-          controller: _namespaceController,
-          decoration: InputDecoration(
-            helperText: 'Namespace',
-            border: OutlineInputBorder(),
+    return Container(
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            controller: _namespaceController,
+            decoration: InputDecoration(
+              helperText: 'Namespace',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        TextField(
-          controller: _keyController,
-          decoration: InputDecoration(
-            helperText: 'Key',
-            border: OutlineInputBorder(),
+          TextField(
+            controller: _keyController,
+            decoration: InputDecoration(
+              helperText: 'Key',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        OutlinedButton(
-          onPressed: () async {
-            var value = await widget.portal.settings
-                .read(_namespaceController.text, _keyController.text);
-            setState(() => _settingsValue = '${value.toNative()}');
-          },
-          child: const Text('Read Setting'),
-        ),
-        Text(_settingsValue),
-      ],
+          OutlinedButton(
+            onPressed: () async {
+              var value = await widget.portal.settings
+                  .read(_namespaceController.text, _keyController.text);
+              setState(() => _settingsValue = '${value.toNative()}');
+            },
+            child: const Text('Read Setting'),
+          ),
+          Text(_settingsValue),
+        ],
+      ),
     );
   }
 }
