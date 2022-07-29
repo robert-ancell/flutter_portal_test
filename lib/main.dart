@@ -93,7 +93,7 @@ class LocationPage extends StatefulWidget {
 }
 
 class LocationPageState extends State<LocationPage> {
-  StreamSubscription<XdgLocation>? locationUpdatedSubscription;
+  Stream<XdgLocation>? locations;
 
   LocationPageState();
 
@@ -103,30 +103,54 @@ class LocationPageState extends State<LocationPage> {
       margin: EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Switch(
-                value: locationUpdatedSubscription != null,
-                onChanged: (enabled) async {
-                  if (enabled) {
-                    var locations =
-                        await widget.portal.location.createSession();
-                    var locationUpdatedSubscription =
-                        locations.listen((location) {
-                      print(location);
-                    });
-                    setState(() {
-                      this.locationUpdatedSubscription =
-                          locationUpdatedSubscription;
-                    });
-                  } else {
-                    await locationUpdatedSubscription?.cancel();
-                    setState(() => this.locationUpdatedSubscription = null);
-                  }
-                },
-              ),
-              Text('Enabled'),
-            ],
+          Row(children: <Widget>[
+            Switch(
+              value: locations != null,
+              onChanged: (enabled) async {
+                if (enabled) {
+                  var locations = widget.portal.location.createSession();
+                  setState(() {
+                    this.locations = locations;
+                  });
+                } else {
+                  setState(() => locations = null);
+                }
+              },
+            ),
+            Text('Enabled'),
+          ]),
+          StreamBuilder<XdgLocation>(
+            stream: locations,
+            builder:
+                (BuildContext context, AsyncSnapshot<XdgLocation> snapshot) {
+              var latitudeController = TextEditingController();
+              var longitudeController = TextEditingController();
+              if (snapshot.hasData) {
+                var location = snapshot.data!;
+                latitudeController.text = '${location.latitude}';
+                longitudeController.text = '${location.longitude}';
+              }
+              return Column(
+                children: <Widget>[
+                  TextField(
+                    readOnly: true,
+                    controller: latitudeController,
+                    decoration: InputDecoration(
+                      helperText: 'Latitude',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  TextField(
+                    readOnly: true,
+                    controller: longitudeController,
+                    decoration: InputDecoration(
+                      helperText: 'Longitude',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
