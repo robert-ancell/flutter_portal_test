@@ -167,17 +167,62 @@ class NetworkMonitorPage extends StatefulWidget {
 class NetworkMonitorPageState extends State<NetworkMonitorPage> {
   NetworkMonitorPageState();
 
+  Stream<XdgNetworkStatus>? status;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
-          OutlinedButton(
-            onPressed: () async {
-              print('FIXME');
+          Row(children: <Widget>[
+            Switch(
+              value: status != null,
+              onChanged: (enabled) async {
+                if (enabled) {
+                  var status = widget.portal.networkMonitor.status;
+                  setState(() {
+                    this.status = status;
+                  });
+                } else {
+                  setState(() => status = null);
+                }
+              },
+            ),
+            const Text('Enabled'),
+          ]),
+          StreamBuilder<XdgNetworkStatus>(
+            stream: status,
+            builder: (BuildContext context,
+                AsyncSnapshot<XdgNetworkStatus> snapshot) {
+              var availableController = TextEditingController();
+              var meteredController = TextEditingController();
+              if (snapshot.hasData) {
+                var s = snapshot.data!;
+                availableController.text = s.available ? 'Yes' : 'No';
+                meteredController.text = s.metered ? 'Yes' : 'No';
+              }
+              return Column(
+                children: <Widget>[
+                  TextField(
+                    readOnly: true,
+                    controller: availableController,
+                    decoration: const InputDecoration(
+                      helperText: 'Available',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  TextField(
+                    readOnly: true,
+                    controller: meteredController,
+                    decoration: const InputDecoration(
+                      helperText: 'Metered',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              );
             },
-            child: const Text('Network Monitor'),
           ),
         ],
       ),
