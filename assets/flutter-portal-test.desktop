@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Flutter Portal Test
+Comment=Test portal support in Flutter
+Exec=flutter-portal-test
+Icon=terminal
+Terminal=false
+Categories=Development

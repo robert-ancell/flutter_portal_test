@@ -50,6 +50,7 @@ parts:
 apps:
   flutter-portal-test:
     command: bin/flutter_portal_test
+    desktop: bin/data/flutter_assets/assets/flutter-portal-test.desktop
     extensions: [gnome]
     plugs:
       - network
