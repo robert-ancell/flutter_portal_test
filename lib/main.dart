@@ -62,6 +62,11 @@ class EmailPage extends StatefulWidget {
 }
 
 class EmailPageState extends State<EmailPage> {
+  final _addressController = TextEditingController();
+  final _ccController = TextEditingController();
+  final _bccController = TextEditingController();
+  final _subjectController = TextEditingController();
+
   EmailPageState();
 
   @override
@@ -70,9 +75,49 @@ class EmailPageState extends State<EmailPage> {
       margin: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
+          TextField(
+            controller: _addressController,
+            decoration: const InputDecoration(
+              helperText: 'To',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            controller: _ccController,
+            decoration: const InputDecoration(
+              helperText: 'Cc',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            controller: _bccController,
+            decoration: const InputDecoration(
+              helperText: 'Bcc',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            controller: _subjectController,
+            decoration: const InputDecoration(
+              helperText: 'Subject',
+              border: OutlineInputBorder(),
+            ),
+          ),
           OutlinedButton(
             onPressed: () async {
-              await widget.portal.email.composeEmail();
+              Iterable<String> parseAddresses(String text) {
+                return text
+                    .split(',')
+                    .map((a) => a.trim())
+                    .where((a) => a != '');
+              }
+
+              var addresses = parseAddresses(_addressController.text);
+              var cc = parseAddresses(_ccController.text);
+              var bcc = parseAddresses(_bccController.text);
+              var subject = _subjectController.text;
+              await widget.portal.email.composeEmail(
+                  addresses: addresses, cc: cc, bcc: bcc, subject: subject);
             },
             child: const Text('Compose Email'),
           ),
