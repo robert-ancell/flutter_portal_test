@@ -1,7 +1,7 @@
 name: flutter_portal_test
 description: An application to test portal support in Flutter.
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
