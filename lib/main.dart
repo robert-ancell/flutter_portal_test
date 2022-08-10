@@ -20,12 +20,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 7,
+        length: 8,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'Email'),
+                Tab(text: 'FileChooser'),
                 Tab(text: 'Location'),
                 Tab(text: 'NetworkMonitor'),
                 Tab(text: 'Notification'),
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               EmailPage(portal: portal),
+              FileChooserPage(portal: portal),
               LocationPage(portal: portal),
               NetworkMonitorPage(portal: portal),
               NotificationPage(portal: portal),
@@ -120,6 +122,67 @@ class EmailPageState extends State<EmailPage> {
                   addresses: addresses, cc: cc, bcc: bcc, subject: subject);
             },
             child: const Text('Compose Email'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FileChooserPage extends StatefulWidget {
+  final XdgDesktopPortalClient portal;
+
+  const FileChooserPage({Key? key, required this.portal}) : super(key: key);
+
+  @override
+  State<FileChooserPage> createState() => FileChooserPageState();
+}
+
+class FileChooserPageState extends State<FileChooserPage> {
+  final _urisController = TextEditingController();
+
+  FileChooserPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              var result = await widget.portal.fileChooser
+                  .openFile(title: 'Open File')
+                  .first;
+              _urisController.text = result.uris.join(', ');
+            },
+            child: const Text('Open File'),
+          ),
+          OutlinedButton(
+            onPressed: () async {
+              var result = await widget.portal.fileChooser
+                  .saveFile(title: 'Save File')
+                  .first;
+              _urisController.text = result.uris.join(', ');
+            },
+            child: const Text('Save File'),
+          ),
+          OutlinedButton(
+            onPressed: () async {
+              var result = await widget.portal.fileChooser
+                  .saveFiles(title: 'Save Files')
+                  .first;
+              _urisController.text = result.uris.join(', ');
+            },
+            child: const Text('Save Files'),
+          ),
+          TextField(
+            readOnly: true,
+            controller: _urisController,
+            decoration: const InputDecoration(
+              helperText: 'URIs',
+              border: OutlineInputBorder(),
+            ),
           ),
         ],
       ),

@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  xdg_desktop_portal: ^0.1.7
+  xdg_desktop_portal: ^0.1.8
 
 dev_dependencies:
   flutter_test:
