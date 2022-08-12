@@ -20,12 +20,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 9,
+        length: 10,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'Account'),
+                Tab(text: 'Camera'),
                 Tab(text: 'Email'),
                 Tab(text: 'FileChooser'),
                 Tab(text: 'Location'),
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
             children: [
               AccountPage(portal: portal),
+              CameraPage(portal: portal),
               EmailPage(portal: portal),
               FileChooserPage(portal: portal),
               LocationPage(portal: portal),
@@ -114,6 +116,36 @@ class AccountPageState extends State<AccountPage> {
               helperText: 'Icon',
               border: OutlineInputBorder(),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CameraPage extends StatefulWidget {
+  final XdgDesktopPortalClient portal;
+
+  const CameraPage({Key? key, required this.portal}) : super(key: key);
+
+  @override
+  State<CameraPage> createState() => CameraPageState();
+}
+
+class CameraPageState extends State<CameraPage> {
+  CameraPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              await widget.portal.camera.accessCamera();
+            },
+            child: const Text('Access Camera'),
           ),
         ],
       ),
