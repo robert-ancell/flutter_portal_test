@@ -20,11 +20,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 8,
+        length: 9,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
+                Tab(text: 'Account'),
                 Tab(text: 'Email'),
                 Tab(text: 'FileChooser'),
                 Tab(text: 'Location'),
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
+              AccountPage(portal: portal),
               EmailPage(portal: portal),
               FileChooserPage(portal: portal),
               LocationPage(portal: portal),
@@ -49,6 +51,71 @@ class MyApp extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AccountPage extends StatefulWidget {
+  final XdgDesktopPortalClient portal;
+
+  const AccountPage({Key? key, required this.portal}) : super(key: key);
+
+  @override
+  State<AccountPage> createState() => AccountPageState();
+}
+
+class AccountPageState extends State<AccountPage> {
+  final _idController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _imageController = TextEditingController();
+
+  AccountPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              _idController.text = '';
+              _nameController.text = '';
+              _imageController.text = '';
+              var result =
+                  await widget.portal.account.getUserInformation().first;
+              _idController.text = result.id;
+              _nameController.text = result.name;
+              _imageController.text = result.image;
+            },
+            child: const Text('Get User Information'),
+          ),
+          TextField(
+            readOnly: true,
+            controller: _idController,
+            decoration: const InputDecoration(
+              helperText: 'Id',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            readOnly: true,
+            controller: _nameController,
+            decoration: const InputDecoration(
+              helperText: 'Name',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            readOnly: true,
+            controller: _imageController,
+            decoration: const InputDecoration(
+              helperText: 'Icon',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
       ),
     );
   }
