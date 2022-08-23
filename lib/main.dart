@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 11,
+        length: 12,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
                 Tab(text: 'Notification'),
                 Tab(text: 'OpenURI'),
                 Tab(text: 'ProxyResolver'),
+                Tab(text: 'Secret'),
                 Tab(text: 'Settings'),
               ],
             ),
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
               NotificationPage(portal: portal),
               OpenUriPage(portal: portal),
               ProxyResolverPage(portal: portal),
+              SecretPage(portal: portal),
               SettingsPage(portal: portal),
             ],
           ),
@@ -729,6 +731,49 @@ class ProxyResolverPageState extends State<ProxyResolverPage> {
             controller: _resultController,
             decoration: const InputDecoration(
               helperText: 'Proxies',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SecretPage extends StatefulWidget {
+  final XdgDesktopPortalClient portal;
+
+  const SecretPage({Key? key, required this.portal}) : super(key: key);
+
+  @override
+  State<SecretPage> createState() => SecretPageState();
+}
+
+class SecretPageState extends State<SecretPage> {
+  final _secretController = TextEditingController();
+
+  SecretPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          OutlinedButton(
+            onPressed: () async {
+              _secretController.text = '';
+              var secret = await widget.portal.secret.retrieveSecret();
+              _secretController.text =
+                  secret.map((v) => v.toRadixString(16).padLeft(2, '0')).join();
+            },
+            child: const Text('Retrieve Secret'),
+          ),
+          TextField(
+            readOnly: true,
+            controller: _secretController,
+            decoration: const InputDecoration(
+              helperText: 'Secret',
               border: OutlineInputBorder(),
             ),
           ),
