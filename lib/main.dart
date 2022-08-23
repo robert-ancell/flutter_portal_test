@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:xdg_desktop_portal/xdg_desktop_portal.dart';
@@ -20,13 +21,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 10,
+        length: 11,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
                 Tab(text: 'Account'),
                 Tab(text: 'Camera'),
+                Tab(text: 'Documents'),
                 Tab(text: 'Email'),
                 Tab(text: 'FileChooser'),
                 Tab(text: 'Location'),
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
             children: [
               AccountPage(portal: portal),
               CameraPage(portal: portal),
+              DocumentsPage(portal: portal),
               EmailPage(portal: portal),
               FileChooserPage(portal: portal),
               LocationPage(portal: portal),
@@ -146,6 +149,164 @@ class CameraPageState extends State<CameraPage> {
               await widget.portal.camera.accessCamera();
             },
             child: const Text('Access Camera'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DocumentsPage extends StatefulWidget {
+  final XdgDesktopPortalClient portal;
+
+  const DocumentsPage({Key? key, required this.portal}) : super(key: key);
+
+  @override
+  State<DocumentsPage> createState() => DocumentsPageState();
+}
+
+class DocumentsPageState extends State<DocumentsPage> {
+  final _addFileController = TextEditingController();
+  final _permissionsDocIdController = TextEditingController();
+  final _permissionsAppIdController = TextEditingController();
+  var _permissionRead = false;
+  var _permissionWrite = false;
+  var _permissionGrantPermissions = false;
+  var _permissionDelete = false;
+  final _deleteDocIdController = TextEditingController();
+
+  Set<XdgDocumentPermission> get _permissions {
+    var permissions = <XdgDocumentPermission>{};
+    if (_permissionRead) {
+      permissions.add(XdgDocumentPermission.read);
+    }
+    if (_permissionWrite) {
+      permissions.add(XdgDocumentPermission.write);
+    }
+    if (_permissionGrantPermissions) {
+      permissions.add(XdgDocumentPermission.grantPermissions);
+    }
+    if (_permissionDelete) {
+      permissions.add(XdgDocumentPermission.delete);
+    }
+    return permissions;
+  }
+
+  DocumentsPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            controller: _addFileController,
+            decoration: const InputDecoration(
+              helperText: 'File',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          OutlinedButton(
+            onPressed: () async {
+              var path = _addFileController.text;
+              var docIds = await widget.portal.documents.add([File(path)]);
+              _permissionsDocIdController.text = docIds[0];
+              _deleteDocIdController.text = docIds[0];
+            },
+            child: const Text('Add'),
+          ),
+          TextField(
+            controller: _permissionsDocIdController,
+            decoration: const InputDecoration(
+              helperText: 'Document ID',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          TextField(
+            controller: _permissionsAppIdController,
+            decoration: const InputDecoration(
+              helperText: 'Application ID',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          Row(children: <Widget>[
+            Switch(
+                value: _permissionRead,
+                onChanged: (enabled) async {
+                  setState(() {
+                    _permissionRead = enabled;
+                  });
+                }),
+            const Text('Read'),
+          ]),
+          Row(children: <Widget>[
+            Switch(
+                value: _permissionWrite,
+                onChanged: (enabled) async {
+                  setState(() {
+                    _permissionWrite = enabled;
+                  });
+                }),
+            const Text('Write'),
+          ]),
+          Row(children: <Widget>[
+            Switch(
+                value: _permissionGrantPermissions,
+                onChanged: (enabled) async {
+                  setState(() {
+                    _permissionGrantPermissions = enabled;
+                  });
+                }),
+            const Text('Grant Permissions'),
+          ]),
+          Row(children: <Widget>[
+            Switch(
+                value: _permissionDelete,
+                onChanged: (enabled) async {
+                  setState(() {
+                    _permissionDelete = enabled;
+                  });
+                }),
+            const Text('Delete'),
+          ]),
+          OutlinedButton(
+            onPressed: () async {
+              var docId = _permissionsDocIdController.text;
+              var appId = _permissionsAppIdController.text;
+              await widget.portal.documents
+                  .grantPermissions(docId, appId, _permissions);
+            },
+            child: const Text('Grant Permissions'),
+          ),
+          OutlinedButton(
+            onPressed: () async {
+              var docId = _permissionsDocIdController.text;
+              var appId = _permissionsAppIdController.text;
+              await widget.portal.documents
+                  .revokePermissions(docId, appId, _permissions);
+            },
+            child: const Text('Revoke Permissions'),
+          ),
+          TextField(
+            controller: _deleteDocIdController,
+            decoration: const InputDecoration(
+              helperText: 'Document ID',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          OutlinedButton(
+            onPressed: () async {
+              var docId = _deleteDocIdController.text;
+              await widget.portal.documents.delete(docId);
+              if (_permissionsDocIdController.text == docId) {
+                _permissionsDocIdController.text = '';
+              }
+              if (_deleteDocIdController.text == docId) {
+                _deleteDocIdController.text = '';
+              }
+            },
+            child: const Text('Delete'),
           ),
         ],
       ),

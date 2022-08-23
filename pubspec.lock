@@ -56,7 +56,7 @@ packages:
       name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.7"
+    version: "0.7.8"
   fake_async:
     dependency: transitive
     description:
@@ -190,7 +190,7 @@ packages:
       name: xdg_desktop_portal
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.10"
+    version: "0.1.11"
   xml:
     dependency: transitive
     description:
